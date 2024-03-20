@@ -38,6 +38,7 @@ exports.suiteTools = async (req, res, next) => {
   const suiteTools = await adminApp.findAll({
     include: {
       model: app,
+      required:true
     },
   });
   const arrayOfApps = suiteTools.map((item) => item.app);
@@ -104,6 +105,7 @@ exports.topApp = async (req, res, next) => {
     },
     include: {
       model: app,
+      required:true
     },
   });
   const arrayOfApps = suiteTools.map((item) => item.app);
