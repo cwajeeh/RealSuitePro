@@ -10,7 +10,7 @@ const validateToken = require("../middlewares/accessCheck");
 // 1.  Get Admin Apps
 router.get("/suiteTools", asyncMiddleware(dashboradController.suiteTools));
 // 1.  Get All Apps
-router.get("/allApps", asyncMiddleware(dashboradController.allApps));
+router.get("/allApps",validateToken, asyncMiddleware(dashboradController.allApps));
 //2. Add Admin App
 router.post(
   "/addSuiteTools",
@@ -145,6 +145,7 @@ router.post("/createTeam", validateToken, dashboradController.createTeam);
 router.get("/getTeams", validateToken, dashboradController.getTeams);
 // Get Team Details
 router.get("/getTeamDetails", validateToken, dashboradController.getTeamDetails);
-
+// get All roles
+router.get("/getroles", validateToken, dashboradController.getroles);
 
 module.exports = router;

@@ -18,6 +18,7 @@ const dashboardRoute = require('./routes/dashboardRoutes');
 // Use the workerRoute for the /workerinfo route
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/auth/v1', authRoute);
 app.use('/dashboard/v1', dashboardRoute);

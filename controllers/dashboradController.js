@@ -8,6 +8,7 @@ const {
   office,
   addressDBS,
   trainingVideo,
+  role,
   team,
 } = require("../models");
 const path = require("path");
@@ -38,7 +39,7 @@ exports.suiteTools = async (req, res, next) => {
   const suiteTools = await adminApp.findAll({
     include: {
       model: app,
-      required:true
+      required: true,
     },
   });
   const arrayOfApps = suiteTools.map((item) => item.app);
@@ -48,7 +49,20 @@ exports.suiteTools = async (req, res, next) => {
   2. Show All Apps
 */
 exports.allApps = async (req, res, next) => {
-  const AllApps = await app.findAll();
+  const userId = req.user.id;
+  const allApps = await app.findAll();
+  const topApps = await topApp.findAll({
+    where:{
+      userId
+    }
+  });
+  const AllApps = allApps.map(app => {
+    const isSimilar = topApps.some(topApp => topApp.appId === app.id);
+    return {
+      ...app.toJSON(),
+      topApp: isSimilar
+    };
+  });
   return res.json(returnFunction("1", "All Apps", AllApps, ""));
 };
 /**
@@ -79,17 +93,19 @@ exports.addSuiteTools = async (req, res, next) => {
 exports.addtopApp = async (req, res, next) => {
   const userId = req.user.id;
   const { appId } = req.body;
-  const count = await topApp.findAll({
+  const found = await topApp.findOne({
     where: {
+      appId,
       userId,
     },
   });
 
-  const found = count.find((ele) => ele.appId === appId);
+  
   if (found) {
-    return next(new appError("App already Exists", 200));
+    await found.destroy();
+    return res.json(returnFunction("1", "App Removed Successfully!", {}, ""));
   }
-  const suiteTools = await topApp.create({
+   await topApp.create({
     appId,
     userId: req.user.id,
   });
@@ -105,7 +121,7 @@ exports.topApp = async (req, res, next) => {
     },
     include: {
       model: app,
-      required:true
+      required: true,
     },
   });
   const arrayOfApps = suiteTools.map((item) => item.app);
@@ -300,6 +316,7 @@ exports.addAgent = async (req, res, next) => {
     DOB,
     gender,
     officeId,
+    roleId
   } = req.body;
   const Access = await user.findByPk(req.user.id);
   if (Access.roleId !== 1) {
@@ -329,7 +346,7 @@ exports.addAgent = async (req, res, next) => {
     DOB,
     gender,
     officeId,
-    roleId: 3,
+    roleId,
   });
   return res.json(
     returnFunction("1", "Agent Added Successfully!", AgentData, "")
@@ -343,6 +360,11 @@ exports.allAgents = async (req, res, next) => {
     where: {
       roleId: 3,
     },
+    include: [
+      { model: office, attributes: ["officeName"] },
+      { model: role, attributes: ["name"] },
+    ],
+    attribute: ["firstName", "lastName", "email", "roleId", "officeId"],
   });
   return res.json(returnFunction("1", "All Agents", AllAgents, ""));
 };
@@ -360,8 +382,18 @@ exports.addOffice = async (req, res, next) => {
     franchiseNetwork,
     dateEstablished,
     franchiseOwnerId,
-    addressData
+    addressData,
   } = req.body;
+  console.log(
+    franchiseName,
+    officeName,
+    officeRosterLink,
+    employeeCapacity,
+    complianceWithFranchiseStandards,
+    franchiseNetwork,
+    dateEstablished,
+    franchiseOwnerId
+  );
   const newOffice = await office.create({
     franchiseName,
     officeName,
@@ -372,8 +404,8 @@ exports.addOffice = async (req, res, next) => {
     dateEstablished,
     franchiseOwnerId,
   });
-  addressData.officeId =newOffice.id;
-const address = await addressDBS.create(addressData);
+  addressData.officeId = newOffice.id;
+  // const address = await addressDBS.create(addressData);
   return res.json(
     returnFunction("1", "Office Added Successfully!", newOffice, "")
   );
@@ -430,4 +462,17 @@ exports.getTeamDetails = async (req, res, next) => {
     ],
   });
   return res.json(returnFunction("1", "Team Details", teamDetails, ""));
+};
+
+/**
+  2. Show Roles
+*/
+exports.getroles = async (req, res, next) => {
+  const roles = await role.findAll();
+  // Filter out the role with name "Franchise Owner/Administrator"
+  const Roles = roles.filter(
+    (role) => role.name !== "Franchise Owner/Administrator"
+  );
+
+  return res.json(returnFunction("1", "All Roles", Roles, ""));
 };
