@@ -289,13 +289,33 @@ exports.allVideos = async (req, res, next) => {
   return res.json(returnFunction("1", "All Resources", allResources, ""));
 };
 /**
-  2. Show All Apps
+  2. Show Pinned Videos
 */
 exports.pinnedVideos = async (req, res, next) => {
   const allResources = await trainingVideo.findAll({
     where: { pinned: true },
   });
   return res.json(returnFunction("1", "All Resources", allResources, ""));
+};
+/**
+  2. Pin Videos
+*/
+exports.pinVideo = async (req, res, next) => {
+  const {videoId}=req.body;
+  let video = await trainingVideo.findByPk(videoId);
+  video.pinned = true;
+  await video.save();
+  return res.json(returnFunction("1", "Video Pinned Successfully! ",{} , ""));
+};
+/**
+  2.  UnPin Videos
+*/
+exports.unpinVideo = async (req, res, next) => {
+  const {videoId}=req.body;
+  let video = await trainingVideo.findByPk(videoId);
+  video.pinned = false;
+  await video.save();
+  return res.json(returnFunction("1", "Video Removed Successfully! ",{} , ""));
 };
 // ! Module 5: Offices
 /**
