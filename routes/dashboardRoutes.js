@@ -121,6 +121,8 @@ router.post(
 );
 // 1.  Get All Resources
 router.get("/allVideos", asyncMiddleware(dashboradController.allVideos));
+// 1.  Get Pinned Resources
+router.get("/pinnedVideos", asyncMiddleware(dashboradController.pinnedVideos));
 //2. Update Video
 router.post(
     "/updateApp",

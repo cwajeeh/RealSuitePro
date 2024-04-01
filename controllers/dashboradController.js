@@ -52,15 +52,15 @@ exports.allApps = async (req, res, next) => {
   const userId = req.user.id;
   const allApps = await app.findAll();
   const topApps = await topApp.findAll({
-    where:{
-      userId
-    }
+    where: {
+      userId,
+    },
   });
-  const AllApps = allApps.map(app => {
-    const isSimilar = topApps.some(topApp => topApp.appId === app.id);
+  const AllApps = allApps.map((app) => {
+    const isSimilar = topApps.some((topApp) => topApp.appId === app.id);
     return {
       ...app.toJSON(),
-      topApp: isSimilar
+      topApp: isSimilar,
     };
   });
   return res.json(returnFunction("1", "All Apps", AllApps, ""));
@@ -100,12 +100,11 @@ exports.addtopApp = async (req, res, next) => {
     },
   });
 
-  
   if (found) {
     await found.destroy();
     return res.json(returnFunction("1", "App Removed Successfully!", {}, ""));
   }
-   await topApp.create({
+  await topApp.create({
     appId,
     userId: req.user.id,
   });
@@ -289,6 +288,15 @@ exports.allVideos = async (req, res, next) => {
   const allResources = await trainingVideo.findAll();
   return res.json(returnFunction("1", "All Resources", allResources, ""));
 };
+/**
+  2. Show All Apps
+*/
+exports.pinnedVideos = async (req, res, next) => {
+  const allResources = await trainingVideo.findAll({
+    where: { pinned: true },
+  });
+  return res.json(returnFunction("1", "All Resources", allResources, ""));
+};
 // ! Module 5: Offices
 /**
   2. Show All Offices
@@ -316,7 +324,7 @@ exports.addAgent = async (req, res, next) => {
     DOB,
     gender,
     officeId,
-    roleId
+    roleId,
   } = req.body;
   const Access = await user.findByPk(req.user.id);
   if (Access.roleId !== 1) {

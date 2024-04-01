@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: false,
           unique: true
         },
+        pinned: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false
+        },
         supplementaryMaterials: {
           type: DataTypes.JSON 
         }
