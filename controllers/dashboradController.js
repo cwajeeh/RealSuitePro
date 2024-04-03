@@ -328,6 +328,22 @@ exports.unpinVideo = async (req, res, next) => {
   await video.save();
   return res.json(returnFunction("1", "Video Removed Successfully! ", {}, ""));
 };
+/**
+  2. Show Video Details
+*/
+exports.videoDetails = async (req, res, next) => {
+  const videoId = req.query.videoId;
+  const Resource = await trainingVideo.findByPk(videoId);
+  if (!Resource) {
+    return res.status(404).json({ status: "0", message: "Video not found", data: null });
+  }
+
+  // Find all videos with the same category
+  const relatedVideos = await trainingVideo.findAll({
+    where: { category: Resource.category }
+  });
+  return res.json(returnFunction("1", "Video Details", {Resource, relatedVideos},""));
+};
 // ! Module 5: Offices
 /**
   2. Show All Offices
