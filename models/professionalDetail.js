@@ -21,6 +21,7 @@ module.exports = (sequelize) => {
   // Define the association within the associate method
   professionalDetail.associate = (models) => {
     // Each ProfessionalDetails instance belongs to a user
+    models.user.hasOne(professionalDetail);
     professionalDetail.belongsTo(models.user);
      // Each ProfessionalDetails instance can have multiple Certifications
      professionalDetail.hasMany(models.Certification);

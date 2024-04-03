@@ -13,6 +13,7 @@ module.exports = (sequelize) => {
   // Define the association within the associate method
   Award.associate = (models) => {
     // Each Award instance belongs to a user
+    models.user.hasMany(Award);
     Award.belongsTo(models.user);
   };
 

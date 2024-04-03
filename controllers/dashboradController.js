@@ -10,6 +10,17 @@ const {
   trainingVideo,
   role,
   team,
+  professionalDetail,
+  link,
+  language,
+  hobby,
+  phoneNumber,
+  civicActivity,
+  Award,
+  education,
+  designation,
+  license,
+  speciality
 } = require("../models");
 const path = require("path");
 const fs = require("fs");
@@ -301,21 +312,21 @@ exports.pinnedVideos = async (req, res, next) => {
   2. Pin Videos
 */
 exports.pinVideo = async (req, res, next) => {
-  const {videoId}=req.body;
+  const { videoId } = req.body;
   let video = await trainingVideo.findByPk(videoId);
   video.pinned = true;
   await video.save();
-  return res.json(returnFunction("1", "Video Pinned Successfully! ",{} , ""));
+  return res.json(returnFunction("1", "Video Pinned Successfully! ", {}, ""));
 };
 /**
   2.  UnPin Videos
 */
 exports.unpinVideo = async (req, res, next) => {
-  const {videoId}=req.body;
+  const { videoId } = req.body;
   let video = await trainingVideo.findByPk(videoId);
   video.pinned = false;
   await video.save();
-  return res.json(returnFunction("1", "Video Removed Successfully! ",{} , ""));
+  return res.json(returnFunction("1", "Video Removed Successfully! ", {}, ""));
 };
 // ! Module 5: Offices
 /**
@@ -396,7 +407,32 @@ exports.allAgents = async (req, res, next) => {
   });
   return res.json(returnFunction("1", "All Agents", AllAgents, ""));
 };
-
+/**
+  2. Show All Agents
+*/
+exports.agentDetails = async (req, res, next) => {
+  const agentId = req.query.agentId;
+  const AgentDetails = await user.findByPk(agentId, {
+    include: [
+      { model: office, attributes: ["officeName"] },
+      { model: role, attributes: ["name"] },
+      { model: professionalDetail },
+      { model: phoneNumber },
+      { model: language },
+      { model: link },
+      { model: hobby },
+      {model:civicActivity},
+      {model:Award},
+      {model:education},
+      {model:designation},
+      {model:license},
+      {model:speciality}
+    ],
+    attribute: ["firstName", "lastName", "email", "roleId", "officeId"],
+  });
+  return res.json(returnFunction("1", "Agent Details", AgentDetails, ""));
+};
+//! Offices
 /**
   2. Add New Office
 */

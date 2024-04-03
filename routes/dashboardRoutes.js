@@ -144,7 +144,8 @@ router.post("/addOffice", validateToken, dashboradController.addOffice);
 router.post("/addAgent", validateToken, dashboradController.addAgent);
 // All Agents
 router.get("/allAgents", validateToken, dashboradController.allAgents);
-
+//  Agent Details
+router.get("/agentDetails", validateToken, dashboradController.agentDetails);
 // ! Module 7 :Teams
 router.post("/createTeam", validateToken, dashboradController.createTeam);
 // Get All Teams
