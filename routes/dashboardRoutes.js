@@ -157,4 +157,16 @@ router.get("/getTeamDetails", validateToken, dashboradController.getTeamDetails)
 // get All roles
 router.get("/getroles", validateToken, dashboradController.getroles);
 
+//! Module 8 : Profile
+// get Profile Overview
+router.get("/profileOverview", validateToken, dashboradController.profileOverview);
+// get Professional Details
+router.get("/getProfessionalDetails", validateToken, dashboradController.getProfessionalDetails);
+// get Personal Details
+router.get("/getPersonalDetails", validateToken, dashboradController.getPersonalDetails);
+// get general Info
+router.get("/getGeneralInfo", validateToken, dashboradController.getGeneralInfo);
+// get Contact Info
+router.get("/getContactInfo", validateToken, dashboradController.getContactInfo);
+
 module.exports = router;

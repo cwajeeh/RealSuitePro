@@ -20,7 +20,7 @@ const {
   education,
   designation,
   license,
-  speciality
+  speciality,
 } = require("../models");
 const path = require("path");
 const fs = require("fs");
@@ -335,14 +335,18 @@ exports.videoDetails = async (req, res, next) => {
   const videoId = req.query.videoId;
   const Resource = await trainingVideo.findByPk(videoId);
   if (!Resource) {
-    return res.status(404).json({ status: "0", message: "Video not found", data: null });
+    return res
+      .status(404)
+      .json({ status: "0", message: "Video not found", data: null });
   }
 
   // Find all videos with the same category
   const relatedVideos = await trainingVideo.findAll({
-    where: { category: Resource.category }
+    where: { category: Resource.category },
   });
-  return res.json(returnFunction("1", "Video Details", {Resource, relatedVideos},""));
+  return res.json(
+    returnFunction("1", "Video Details", { Resource, relatedVideos }, "")
+  );
 };
 // ! Module 5: Offices
 /**
@@ -437,12 +441,12 @@ exports.agentDetails = async (req, res, next) => {
       { model: language },
       { model: link },
       { model: hobby },
-      {model:civicActivity},
-      {model:Award},
-      {model:education},
-      {model:designation},
-      {model:license},
-      {model:speciality}
+      { model: civicActivity },
+      { model: Award },
+      { model: education },
+      { model: designation },
+      { model: license },
+      { model: speciality },
     ],
     attribute: ["firstName", "lastName", "email", "roleId", "officeId"],
   });
@@ -555,4 +559,117 @@ exports.getroles = async (req, res, next) => {
   );
 
   return res.json(returnFunction("1", "All Roles", Roles, ""));
+};
+
+//! Profile
+/**
+  1. Profile Overview
+*/
+exports.profileOverview = async (req, res, next) => {
+  const userId = req.user.id;
+  const profile = await user.findByPk(userId, {
+    include: [
+      {
+        model: phoneNumber,
+        attributes: ["id", "countryCode", "phoneNum", "type"],
+      },
+      { model: link, attributes: ["id", "linktype", "linkValue"] },
+      {
+        model: designation,
+        attributes: ["id", "designationName", "orgnization", "status"],
+      },
+      { model: license, attributes: ["id", "LicenseName", "status"] },
+      { model: speciality, attributes: ["id", "specialityName"] },
+    ],
+    attributes: [
+      "id",
+      "nickName",
+      "firstName",
+      "lastName",
+      "email",
+      "ISPemail",
+      "bio",
+      "gender",
+      "dateOfBirth",
+      "image",
+    ],
+  });
+
+  return res.json(returnFunction("1", "Profile Overview", profile, ""));
+};
+/**
+  2. Professional Details
+*/
+exports.getProfessionalDetails = async (req, res, next) => {
+  const userId = req.user.id;
+  const professionalDetils = await user.findByPk(userId, {
+    include: [
+      {
+        model: designation,
+        attributes: ["id", "designationName", "orgnization", "status"],
+      },
+      { model: license, attributes: ["id", "LicenseName", "status"] },
+      { model: speciality, attributes: ["id", "specialityName"] },
+    ],
+    attributes: [
+    ],
+  });
+
+  return res.json(returnFunction("1", "Professional Detils", professionalDetils, ""));
+};
+/**
+  3. Personal Details
+*/
+exports.getPersonalDetails = async (req, res, next) => {
+  const userId = req.user.id;
+  const persolDetils = await user.findByPk(userId, {
+    include: [
+      {
+        model: education,
+        attributes: ["id", "degree", "institution", "startedAt","completedAt"],
+      },
+      { model: civicActivity, attributes: ["id", "activityType", "organization","role","startDate","endDate"] },
+      { model: hobby, attributes: ["id", "hobbyType","details"] },
+      { model: language, attributes: ["id", "languageName","proficiency"] },
+    ],
+    attributes: [
+      "id","bio"
+    ],
+  });
+
+  return res.json(returnFunction("1", "Personal Detils", persolDetils, ""));
+};
+/**
+  4. General Details
+*/
+exports.getGeneralInfo = async (req, res, next) => {
+  const userId = req.user.id;
+  const persolDetils = await user.findByPk(userId, {
+    
+    attributes: [
+      "id","firstName","lastName","dateOfBirth","gender","verifiedAt"
+    ],
+  });
+
+  return res.json(returnFunction("1", "General Detils", persolDetils, ""));
+};
+/**
+  5. contact Details
+*/
+exports.getContactInfo = async (req, res, next) => {
+  const userId = req.user.id;
+  const contactDetails = await user.findByPk(userId, {
+    include: [
+      {
+        model: phoneNumber,
+        attributes: ["id", "countryCode", "phoneNum", "type"],
+      },
+      { model: link, attributes: ["id", "linktype", "linkValue"] },
+    ],
+    attributes: [
+      "id","email","ISPemail",
+    ],
+  });
+
+  return res.json(returnFunction("1", "Contact Detils", contactDetails, ""));
 };
