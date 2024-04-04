@@ -92,7 +92,7 @@ const storage = multer.diskStorage({
     if (file.fieldname === "thumbnail") {
       cb(null, `./Public/thumbnails`);
     } else if (file.fieldname === "supplementary") {
-      cb(null, `./public/supplementary`);
+      cb(null, `./Public/supplementary`);
     } else {
       cb(new Error("Invalid file type"));
     }
@@ -168,5 +168,7 @@ router.get("/getPersonalDetails", validateToken, dashboradController.getPersonal
 router.get("/getGeneralInfo", validateToken, dashboradController.getGeneralInfo);
 // get Contact Info
 router.get("/getContactInfo", validateToken, dashboradController.getContactInfo);
+// get Awards Info
+router.get("/getAwards", validateToken, dashboradController.getAwards);
 
 module.exports = router;

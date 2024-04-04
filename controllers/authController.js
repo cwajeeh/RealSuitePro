@@ -80,6 +80,7 @@ exports.signIn = async (req, res,next) => {
     id: userData.id,
     name: userData.firstName,
     email: userData.email,
+    image:userData.image,
     accessToken,
     role:userData.role
   };

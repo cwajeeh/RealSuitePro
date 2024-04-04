@@ -673,3 +673,16 @@ exports.getContactInfo = async (req, res, next) => {
 
   return res.json(returnFunction("1", "Contact Detils", contactDetails, ""));
 };
+/**
+  5. Awards Details
+*/
+exports.getAwards = async (req, res, next) => {
+  const userId = req.user.id;
+  const Awards = await Award.findAll({
+    where:{
+      userId
+    }
+  });
+
+  return res.json(returnFunction("1", "Awards", {Awards}, ""));
+};
