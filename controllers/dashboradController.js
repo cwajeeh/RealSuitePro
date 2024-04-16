@@ -531,7 +531,14 @@ exports.createTeam = async (req, res, next) => {
   2. Show All Teams
 */
 exports.getTeams = async (req, res, next) => {
-  const AlTeams = await team.findAll({});
+  const AlTeams = await team.findAll({
+    include: [
+      { model: user, as: "TeamLeader", attributes: [ "firstName" ,"lastName" ] },
+    ],
+    attributes:[
+      "id","teamName","formationDate","specialization","targetMarket"
+    ]
+  });
   return res.json(returnFunction("1", "All Teams", AlTeams, ""));
 };
 /**
