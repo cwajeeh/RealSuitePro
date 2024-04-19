@@ -533,11 +533,15 @@ exports.createTeam = async (req, res, next) => {
 exports.getTeams = async (req, res, next) => {
   const AlTeams = await team.findAll({
     include: [
-      { model: user, as: "TeamLeader", attributes: [ "firstName" ,"lastName" ] },
+      { model: user, as: "TeamLeader", attributes: ["firstName", "lastName"] },
     ],
-    attributes:[
-      "id","teamName","formationDate","specialization","targetMarket"
-    ]
+    attributes: [
+      "id",
+      "teamName",
+      "formationDate",
+      "specialization",
+      "targetMarket",
+    ],
   });
   return res.json(returnFunction("1", "All Teams", AlTeams, ""));
 };
@@ -618,11 +622,12 @@ exports.getProfessionalDetails = async (req, res, next) => {
       { model: license, attributes: ["id", "LicenseName", "status"] },
       { model: speciality, attributes: ["id", "specialityName"] },
     ],
-    attributes: [
-    ],
+    attributes: [],
   });
 
-  return res.json(returnFunction("1", "Professional Detils", professionalDetils, ""));
+  return res.json(
+    returnFunction("1", "Professional Detils", professionalDetils, "")
+  );
 };
 /**
   3. Personal Details
@@ -633,15 +638,23 @@ exports.getPersonalDetails = async (req, res, next) => {
     include: [
       {
         model: education,
-        attributes: ["id", "degree", "institution", "startedAt","completedAt"],
+        attributes: ["id", "degree", "institution", "startedAt", "completedAt"],
       },
-      { model: civicActivity, attributes: ["id", "activityType", "organization","role","startDate","endDate"] },
-      { model: hobby, attributes: ["id", "hobbyType","details"] },
-      { model: language, attributes: ["id", "languageName","proficiency"] },
+      {
+        model: civicActivity,
+        attributes: [
+          "id",
+          "activityType",
+          "organization",
+          "role",
+          "startDate",
+          "endDate",
+        ],
+      },
+      { model: hobby, attributes: ["id", "hobbyType", "details"] },
+      { model: language, attributes: ["id", "languageName", "proficiency"] },
     ],
-    attributes: [
-      "id","bio"
-    ],
+    attributes: ["id", "bio"],
   });
 
   return res.json(returnFunction("1", "Personal Detils", persolDetils, ""));
@@ -652,9 +665,13 @@ exports.getPersonalDetails = async (req, res, next) => {
 exports.getGeneralInfo = async (req, res, next) => {
   const userId = req.user.id;
   const persolDetils = await user.findByPk(userId, {
-    
     attributes: [
-      "id","firstName","lastName","dateOfBirth","gender","verifiedAt"
+      "id",
+      "firstName",
+      "lastName",
+      "dateOfBirth",
+      "gender",
+      "verifiedAt",
     ],
   });
 
@@ -673,9 +690,7 @@ exports.getContactInfo = async (req, res, next) => {
       },
       { model: link, attributes: ["id", "linktype", "linkValue"] },
     ],
-    attributes: [
-      "id","email","ISPemail",
-    ],
+    attributes: ["id", "email", "ISPemail"],
   });
 
   return res.json(returnFunction("1", "Contact Detils", contactDetails, ""));
@@ -686,10 +701,10 @@ exports.getContactInfo = async (req, res, next) => {
 exports.getAwards = async (req, res, next) => {
   const userId = req.user.id;
   const Awards = await Award.findAll({
-    where:{
-      userId
-    }
+    where: {
+      userId,
+    },
   });
 
-  return res.json(returnFunction("1", "Awards", {Awards}, ""));
+  return res.json(returnFunction("1", "Awards", { Awards }, ""));
 };
