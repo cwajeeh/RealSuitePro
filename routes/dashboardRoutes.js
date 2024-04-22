@@ -10,7 +10,11 @@ const validateToken = require("../middlewares/accessCheck");
 // 1.  Get Admin Apps
 router.get("/suiteTools", asyncMiddleware(dashboradController.suiteTools));
 // 1.  Get All Apps
-router.get("/allApps",validateToken, asyncMiddleware(dashboradController.allApps));
+router.get(
+  "/allApps",
+  validateToken,
+  asyncMiddleware(dashboradController.allApps)
+);
 //2. Add Admin App
 router.post(
   "/addSuiteTools",
@@ -83,7 +87,7 @@ const videoData = multer({ storage: videoStorage });
 router.post(
   "/uploadTrainingVideo",
   validateToken,
-  videoData.single('video'),
+  videoData.single("video"),
   dashboradController.uploadTrainingVideo
 );
 // ! //////////////////////////////////
@@ -131,11 +135,11 @@ router.post("/pinVideo", asyncMiddleware(dashboradController.pinVideo));
 router.post("/unpinVideo", asyncMiddleware(dashboradController.unpinVideo));
 //2. Update Video
 router.post(
-    "/updateApp",
-    validateToken,
-    upload.single("logo"),
-    asyncMiddleware(dashboradController.updateApp)
-  );
+  "/updateApp",
+  validateToken,
+  upload.single("logo"),
+  asyncMiddleware(dashboradController.updateApp)
+);
 // ! Module 5: Offices
 // All Offices
 router.get("/allOffices", validateToken, dashboradController.allOffices);
@@ -153,21 +157,45 @@ router.post("/createTeam", validateToken, dashboradController.createTeam);
 // Get All Teams
 router.get("/getTeams", validateToken, dashboradController.getTeams);
 // Get Team Details
-router.get("/getTeamDetails", validateToken, dashboradController.getTeamDetails);
+router.get(
+  "/getTeamDetails",
+  validateToken,
+  dashboradController.getTeamDetails
+);
 // get All roles
 router.get("/getroles", validateToken, dashboradController.getroles);
 
 //! Module 8 : Profile
 // get Profile Overview
-router.get("/profileOverview", validateToken, dashboradController.profileOverview);
+router.get(
+  "/profileOverview",
+  validateToken,
+  dashboradController.profileOverview
+);
 // get Professional Details
-router.get("/getProfessionalDetails", validateToken, dashboradController.getProfessionalDetails);
+router.get(
+  "/getProfessionalDetails",
+  validateToken,
+  dashboradController.getProfessionalDetails
+);
 // get Personal Details
-router.get("/getPersonalDetails", validateToken, dashboradController.getPersonalDetails);
+router.get(
+  "/getPersonalDetails",
+  validateToken,
+  dashboradController.getPersonalDetails
+);
 // get general Info
-router.get("/getGeneralInfo", validateToken, dashboradController.getGeneralInfo);
+router.get(
+  "/getGeneralInfo",
+  validateToken,
+  dashboradController.getGeneralInfo
+);
 // get Contact Info
-router.get("/getContactInfo", validateToken, dashboradController.getContactInfo);
+router.get(
+  "/getContactInfo",
+  validateToken,
+  dashboradController.getContactInfo
+);
 // get Awards Info
 router.get("/getAwards", validateToken, dashboradController.getAwards);
 

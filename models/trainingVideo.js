@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     pinned: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue:false
+      defaultValue: false,
     },
     supplementaryMaterials: {
       type: DataTypes.STRING,
